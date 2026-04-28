@@ -1,9 +1,35 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { UploadCloud, FileCheck2, Fingerprint, Loader2, X } from "lucide-react";
+import {
+  UploadCloud,
+  FileCheck2,
+  Fingerprint,
+  Loader2,
+  X,
+  ShieldCheck,
+  Hash,
+  Globe2,
+  Clock,
+  Cpu,
+  Copy,
+  Check,
+} from "lucide-react";
 
 const generateFingerprint = () =>
-  `STX-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+  `STX-${Math.random().toString(36).substring(2, 7).toUpperCase()}-${Math.random()
+    .toString(36)
+    .substring(2, 6)
+    .toUpperCase()}`;
+
+const generateHash = (len = 40) => {
+  const chars = "abcdef0123456789";
+  let out = "";
+  for (let i = 0; i < len; i++) out += chars[Math.floor(Math.random() * chars.length)];
+  return out;
+};
+
+const ALGOS = ["SHA-256", "pHash", "Neural-V4"] as const;
+const REGIONS = ["NA-East", "EU-West", "APAC", "LATAM", "Global Mesh"];
 
 const UploadCard = ({ onScanComplete }: { onScanComplete?: (fp: string, match: number) => void }) => {
   const [file, setFile] = useState<File | null>(null);
