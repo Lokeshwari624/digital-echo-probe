@@ -37,11 +37,24 @@ const UploadCard = ({ onScanComplete }: { onScanComplete?: (fp: string, match: n
   const [progress, setProgress] = useState(0);
   const [matchPct, setMatchPct] = useState<number | null>(null);
   const [fingerprint, setFingerprint] = useState<string | null>(null);
+  const [details, setDetails] = useState<{
+    sha: string;
+    phash: string;
+    algo: string;
+    region: string;
+    mirrors: number;
+    sources: number;
+    confidence: number;
+    scannedAt: string;
+    durationMs: number;
+  } | null>(null);
+  const [copied, setCopied] = useState(false);
   const [drag, setDrag] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!scanning) return;
+    const start = Date.now();
     const interval = setInterval(() => {
       setProgress((p) => {
         if (p >= 100) {
@@ -50,6 +63,17 @@ const UploadCard = ({ onScanComplete }: { onScanComplete?: (fp: string, match: n
           const fp = generateFingerprint();
           setMatchPct(match);
           setFingerprint(fp);
+          setDetails({
+            sha: generateHash(40),
+            phash: generateHash(16),
+            algo: ALGOS[Math.floor(Math.random() * ALGOS.length)],
+            region: REGIONS[Math.floor(Math.random() * REGIONS.length)],
+            mirrors: Math.floor(Math.random() * 12) + 1,
+            sources: Math.floor(Math.random() * 40) + 20,
+            confidence: Math.min(99, match + Math.floor(Math.random() * 8)),
+            scannedAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+            durationMs: Date.now() - start,
+          });
           setScanning(false);
           onScanComplete?.(fp, match);
           return 100;
@@ -65,6 +89,7 @@ const UploadCard = ({ onScanComplete }: { onScanComplete?: (fp: string, match: n
     setProgress(0);
     setMatchPct(null);
     setFingerprint(null);
+    setDetails(null);
     setScanning(true);
   };
 
@@ -73,7 +98,17 @@ const UploadCard = ({ onScanComplete }: { onScanComplete?: (fp: string, match: n
     setProgress(0);
     setMatchPct(null);
     setFingerprint(null);
+    setDetails(null);
     setScanning(false);
+  };
+
+  const copyFp = async () => {
+    if (!fingerprint) return;
+    try {
+      await navigator.clipboard.writeText(fingerprint);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {/* noop */}
   };
 
   return (
