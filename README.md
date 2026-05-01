@@ -24,32 +24,28 @@ Other Tools: (Add APIs, libraries if any)
 
 ---
 
-📂 Project Structure
+## 📂 Project Structure
+
+``` 
 digital-echo-probe/
-│── public/
+│── screenshots/
+│   ├── home.png
+│   ├── login.png
+│   ├── dashboard.png
+│   ├── result.png
 │── src/
-│   ├── components/
-│   ├── pages/
-│   ├── utils/
+│── public/
 │── package.json
 │── README.md
+```
 
 ---
 
 ⚙️ Installation & Setup
 
-Clone the repository:
+Install dependencies: npm install
 
-git clone https://github.com/your-username/digital-echo-probe.git
-cd digital-echo-probe
-
-Install dependencies:
-
-npm install
-
-Run locally:
-
-npm run dev
+Run locally: npm run dev
 
 ---
 
@@ -86,6 +82,8 @@ Submit a Pull Request
 📄 License
 
 This project is licensed under the MIT License.
+
+---
 
 👨‍💻 Author
 
